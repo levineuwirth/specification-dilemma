@@ -15,6 +15,10 @@ __pycache__/
 # OS
 .DS_Store
 
+# Spec (lives outside version control)
+experiment.tex
+experiment.pdf
+
 # LaTeX build artifacts
 *.aux
 *.log
