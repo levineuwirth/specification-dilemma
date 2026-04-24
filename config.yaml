@@ -1,0 +1,27 @@
+# LMStudio server settings
+lmstudio:
+  base_url: "http://localhost:1234/v1"
+  api_key: "lm-studio"   # placeholder; LMStudio ignores this
+  model: "qwen2.5-72b-instruct"   # name as it appears in LMStudio
+
+# Generation parameters
+generation:
+  temperature: 0.7
+  top_p: 0.95
+  max_tokens: 500
+
+# Embedding model
+embedding:
+  model: "sentence-transformers/all-mpnet-base-v2"
+
+# Paths (relative to project root)
+paths:
+  prompts_dir: "prompts"
+  outputs_dir: "outputs"
+  embeddings_dir: "embeddings"
+  results_dir: "results"
+
+# Analysis
+analysis:
+  bootstrap_iterations: 10000
+  random_seed: 42
