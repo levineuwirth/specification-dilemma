@@ -21,7 +21,7 @@ from generate import load_config, make_client
 
 SMOKE_PROMPT = "In one sentence, describe a glass of water on a table."
 SMOKE_SEED = 0
-SMOKE_MAX_TOKENS = 80
+SMOKE_MAX_TOKENS = 500
 
 
 def main() -> None:
@@ -47,9 +47,22 @@ def main() -> None:
             seed=SMOKE_SEED,
         )
         elapsed = time.perf_counter() - t0
-        text = response.choices[0].message.content or ""
+        msg = response.choices[0].message
+        text = msg.content or ""
         outputs.append(text)
         print(f"--- Run {run} ({elapsed:.2f}s) ---")
+        print(f"finish_reason: {response.choices[0].finish_reason}")
+        if response.usage is not None:
+            print(
+                f"tokens: prompt={response.usage.prompt_tokens} "
+                f"completion={response.usage.completion_tokens} "
+                f"total={response.usage.total_tokens}"
+            )
+        reasoning = getattr(msg, "reasoning_content", None) or getattr(msg, "reasoning", None)
+        if reasoning:
+            print(f"reasoning_content ({len(reasoning)} chars):")
+            print(reasoning)
+        print(f"content ({len(text)} chars):")
         print(text)
         print()
 
