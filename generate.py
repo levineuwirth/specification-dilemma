@@ -26,6 +26,18 @@ def make_client(cfg: dict) -> OpenAI:
     )
 
 
+def build_prompt(prompt: str, enable_thinking: bool) -> str:
+    """Append Qwen3 /no_think directive when thinking is disabled.
+
+    Using extra_body={'chat_template_kwargs': {...}} interferes with the
+    seed parameter on some LMStudio backends, so we route the
+    enable/disable signal through the prompt body instead.
+    """
+    if not enable_thinking:
+        return f"{prompt}\n/no_think"
+    return prompt
+
+
 def generate_one(
     client: OpenAI,
     model: str,
@@ -39,12 +51,11 @@ def generate_one(
     """Single completion. Returns the assistant message content."""
     response = client.chat.completions.create(
         model=model,
-        messages=[{"role": "user", "content": prompt}],
+        messages=[{"role": "user", "content": build_prompt(prompt, enable_thinking)}],
         temperature=temperature,
         top_p=top_p,
         max_tokens=max_tokens,
         seed=seed,
-        extra_body={"chat_template_kwargs": {"enable_thinking": enable_thinking}},
     )
     return response.choices[0].message.content or ""
 

@@ -16,7 +16,7 @@ from __future__ import annotations
 
 import time
 
-from generate import load_config, make_client
+from generate import build_prompt, load_config, make_client
 
 
 SMOKE_PROMPT = "In one sentence, describe a glass of water on a table."
@@ -31,11 +31,12 @@ def main() -> None:
     client = make_client(cfg)
 
     enable_thinking = gen_cfg["enable_thinking"]
+    sent_prompt = build_prompt(SMOKE_PROMPT, enable_thinking)
 
     print(f"Endpoint:        {cfg['lmstudio']['base_url']}")
     print(f"Model:           {model}")
     print(f"enable_thinking: {enable_thinking}")
-    print(f"Prompt:          {SMOKE_PROMPT!r}")
+    print(f"Prompt sent:     {sent_prompt!r}")
     print()
 
     outputs = []
@@ -43,12 +44,11 @@ def main() -> None:
         t0 = time.perf_counter()
         response = client.chat.completions.create(
             model=model,
-            messages=[{"role": "user", "content": SMOKE_PROMPT}],
+            messages=[{"role": "user", "content": sent_prompt}],
             temperature=gen_cfg["temperature"],
             top_p=gen_cfg["top_p"],
             max_tokens=SMOKE_MAX_TOKENS,
             seed=SMOKE_SEED,
-            extra_body={"chat_template_kwargs": {"enable_thinking": enable_thinking}},
         )
         elapsed = time.perf_counter() - t0
         msg = response.choices[0].message
