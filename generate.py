@@ -34,6 +34,7 @@ def generate_one(
     top_p: float,
     max_tokens: int,
     seed: int,
+    enable_thinking: bool,
 ) -> str:
     """Single completion. Returns the assistant message content."""
     response = client.chat.completions.create(
@@ -43,6 +44,7 @@ def generate_one(
         top_p=top_p,
         max_tokens=max_tokens,
         seed=seed,
+        extra_body={"chat_template_kwargs": {"enable_thinking": enable_thinking}},
     )
     return response.choices[0].message.content or ""
 
@@ -74,6 +76,7 @@ def run_condition(
             top_p=gen_cfg["top_p"],
             max_tokens=gen_cfg["max_tokens"],
             seed=i,
+            enable_thinking=gen_cfg["enable_thinking"],
         )
         out_file.write_text(text, encoding="utf-8")
 

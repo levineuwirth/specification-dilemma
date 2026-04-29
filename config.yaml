@@ -8,7 +8,14 @@ lmstudio:
 generation:
   temperature: 0.7
   top_p: 0.95
+  # For thinking models (e.g. Qwen3): bump max_tokens substantially
+  # (2000+) when enable_thinking is true, to leave room for both
+  # reasoning and the ~300-word visible output.
   max_tokens: 500
+  # Qwen3-style flag passed via chat_template_kwargs. false disables
+  # chain-of-thought; true enables it. Run 1 of the experiment uses
+  # false; run 2 uses true.
+  enable_thinking: false
 
 # Embedding model
 embedding:

@@ -30,9 +30,12 @@ def main() -> None:
     model = cfg["lmstudio"]["model"]
     client = make_client(cfg)
 
-    print(f"Endpoint: {cfg['lmstudio']['base_url']}")
-    print(f"Model:    {model}")
-    print(f"Prompt:   {SMOKE_PROMPT!r}")
+    enable_thinking = gen_cfg["enable_thinking"]
+
+    print(f"Endpoint:        {cfg['lmstudio']['base_url']}")
+    print(f"Model:           {model}")
+    print(f"enable_thinking: {enable_thinking}")
+    print(f"Prompt:          {SMOKE_PROMPT!r}")
     print()
 
     outputs = []
@@ -45,6 +48,7 @@ def main() -> None:
             top_p=gen_cfg["top_p"],
             max_tokens=SMOKE_MAX_TOKENS,
             seed=SMOKE_SEED,
+            extra_body={"chat_template_kwargs": {"enable_thinking": enable_thinking}},
         )
         elapsed = time.perf_counter() - t0
         msg = response.choices[0].message
