@@ -12,7 +12,7 @@ generation:
   # runs, this includes the chain-of-thought, so 4000 leaves room for
   # ~3000 tokens of reasoning plus ~400 tokens of visible output (the
   # ~300-word target). For non-thinking runs, 500 is sufficient.
-  max_tokens: 4000
+  max_tokens: 8000
   # Qwen3-style flag passed via chat_template_kwargs. true: thinking
   # run; false: no-thinking run. Note: not all LMStudio backends honor
   # this through the API; thinking suppression may need to be set in
